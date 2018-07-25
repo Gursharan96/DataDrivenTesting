@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="OrderProductDB.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="OrderProductDBStoreContainer">
+    <EntitySet Name="Orders" EntityType="OrderProductDB.Store.Orders" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Products" EntityType="OrderProductDB.Store.Products" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="OrderProduct" EntityType="OrderProductDB.Store.OrderProduct" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_OrderProduct_Order" Association="OrderProductDB.Store.FK_OrderProduct_Order">
+      <End Role="Order" EntitySet="Orders" />
+      <End Role="OrderProduct" EntitySet="OrderProduct" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderProduct_Product" Association="OrderProductDB.Store.FK_OrderProduct_Product">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="OrderProduct" EntitySet="OrderProduct" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Orders">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OrderDate" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Department" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Products">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="OrderProduct">
+    <Key>
+      <PropertyRef Name="Orders_Id" />
+      <PropertyRef Name="Products_Id" />
+    </Key>
+    <Property Name="Orders_Id" Type="int" Nullable="false" />
+    <Property Name="Products_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_OrderProduct_Order">
+    <End Role="Order" Type="OrderProductDB.Store.Orders" Multiplicity="1" />
+    <End Role="OrderProduct" Type="OrderProductDB.Store.OrderProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrderProduct">
+        <PropertyRef Name="Orders_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderProduct_Product">
+    <End Role="OrderProduct" Type="OrderProductDB.Store.OrderProduct" Multiplicity="*" />
+    <End Role="Product" Type="OrderProductDB.Store.Products" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrderProduct">
+        <PropertyRef Name="Products_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
